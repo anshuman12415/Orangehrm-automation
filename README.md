@@ -1,27 +1,26 @@
-# Orangehrm-automation
-Automating orangeHRM using python-POM&amp;Data driven(Hybrid framework)
-# OrangeHRM Automation Framework 🚀
+# 🟠 OrangeHRM Automation Framework 🚀
 
-Hybrid automation framework for [OrangeHRM Demo](https://opensource-demo.orangehrmlive.com/web/index.php/auth/login)  
-Built with **Python + Selenium + Pytest + POM + Data-Driven (Excel)**  
+Automating [OrangeHRM Demo](https://opensource-demo.orangehrmlive.com/web/index.php/auth/login)  
+Built with **Python + Selenium + Pytest + POM + Data-Driven (Hybrid Framework)**  
 Reports: **Allure** + **pytest-html**  
 CI/CD: **GitHub Actions**
 
 ---
 
 ## 📌 Features
-- **Selenium + Python** for web UI automation
-- **Hybrid Framework**: Page Object Model (POM) + Data Driven (Excel)
-- **Pytest Fixtures**: driver setup, base URL, Excel data reader
-- **Reporting**:
-  - Self-contained HTML report (pytest-html)
-  - Allure advanced reporting with screenshots
-- **CI/CD Integration**:
-  - GitHub Actions workflow on every push/PR
-  - Reports uploaded as artifacts
-- **Cross-platform**: Works on Mac (M1), Linux, CI runners
+- 🖥️ **Selenium + Python** for Web UI automation  
+- 🏗 **Hybrid Framework**: Page Object Model (POM) + Data Driven (Excel)  
+- ⚡ **Pytest Fixtures** for driver setup, base URL, and test data  
+- 📊 **Reporting**:
+  - Self-contained HTML report (**pytest-html**)  
+  - Advanced reports with screenshots (**Allure**)  
+- 🔄 **CI/CD Integration**:
+  - GitHub Actions workflow (runs on push/PR)  
+  - Test reports uploaded as artifacts  
+- 🌍 **Cross-platform**: Mac (M1), Linux, Windows, CI runners  
 
 ---
+
 ## 📂 Folder Structure
 
 ```bash
@@ -30,8 +29,8 @@ orangehrm-automation/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions workflow
 │
-├── requirements.txt             # Project dependencies
-├── pytest.ini                   # Pytest configuration
+├── requirements.txt             # Dependencies
+├── pytest.ini                   # Pytest config
 ├── conftest.py                  # Fixtures + reporting hooks
 │
 ├── pages/
@@ -39,14 +38,14 @@ orangehrm-automation/
 │   └── login_page.py            # Page Object
 │
 ├── tests/
-│   └── test_login.py            # Login test (valid/invalid)
+│   └── test_login.py            # Login tests
 │
 ├── testdata/
 │   └── login_data.xlsx          # Excel test data
 │
 ├── utilities/
 │   ├── excel_reader.py          # Excel utility
-│   └── driver_factory.py        # Driver management
+│   └── driver_factory.py        # Driver manager
 │
 ├── reports/
 │   ├── allure-results/          # Raw Allure results
@@ -54,124 +53,70 @@ orangehrm-automation/
 │
 └── README.md
 
-## ⚙️ Setup (Local)
-
-### 1️⃣ Create Virtual Environment
-```bash
+⚙️ Local Setup
+1️⃣ Create Virtual Environment
 python3 -m venv .venv
-source .venv/bin/activate  # Mac/Linux
-.venv\Scripts\activate     # Windows
-
+source .venv/bin/activate   # Mac/Linux
+.venv\Scripts\activate      # Windows
 2️⃣ Install Dependencies
-
 pip install -r requirements.txt
-
 3️⃣ Run Tests (with Reports)
-
 pytest --alluredir=reports/allure-results --html=reports/report.html --self-contained-html -q
+4️⃣ Generate Allure Report
+# Install Allure CLI first
+brew install allure      # Mac
+scoop install allure     # Windows
 
-4️⃣ Generate Allure Report (HTML)
-
-# Requires Allure CLI installed (brew install allure / scoop install allure)
+# Generate + open report
 allure generate reports/allure-results -o reports/allure-report --clean
 allure open reports/allure-report
 
 📊 Reports
-	•	pytest-html → reports/report.html (open directly in browser)
-	•	Allure Report → Rich report with steps, screenshots, logs
-
-Screenshots are captured automatically on each test (pass/fail) and attached to reports.
-
-⸻
+	•	📝 pytest-html → reports/report.html (open in browser)
+	•	📸 Allure Report → Interactive UI with steps, logs, screenshots
+	•	✅ Screenshots automatically captured and attached to reports
 
 🤖 CI/CD with GitHub Actions
 	•	Workflow: .github/workflows/ci.yml
-	•	Triggers: On push, pull_request, or manual dispatch
+	•	Triggers: on push, pull_request, or manual run
 	•	Runs on: ubuntu-latest
-	•	Steps:
+
+Steps executed in CI:
 	1.	Checkout repo
 	2.	Setup Python 3.11
 	3.	Install dependencies
 	4.	Install Chromium + Chromedriver
-	5.	Run pytest with Allure + HTML reports
-	6.	Upload artifacts (pytest-html, allure-results, screenshots)
+	5.	Run pytest (Allure + HTML reports)
+	6.	Upload artifacts (reports, screenshots)
 
-⸻
+📥 Download Test Reports from GitHub Actions
+	1.	Go to Actions tab in GitHub repo
+	2.	Select a workflow run
+	3.	Scroll to Artifacts section
+	4.	Download:
+	•	pytest-html-report → open report.html
+	•	allure-results → generate locally with:
+												allure serve allure-results
+	•	screenshots → test evidence
 
-📥 Fetch CI Reports
-	1.	Go to your repo → Actions tab
-	2.	Click latest workflow run → scroll down to Artifacts
-	3.	Download:
-	•	pytest-html-report → contains report.html (open directly in browser)
-	•	allure-results → raw data (use allure generate locally)
-	•	screenshots → captured test screenshots
-
-Optional: Auto-generate Allure HTML in CI
-
-Add this snippet to your workflow (ci.yml) after tests:
-yaml
-
-- name: Install Allure CLI
-  run: |
-    sudo apt-get update
-    sudo apt-get install -y unzip default-jre
-    wget -qO /tmp/allure.zip https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.21.0/allure-commandline-2.21.0.zip
-    sudo unzip -o /tmp/allure.zip -d /opt/
-    sudo ln -s /opt/allure-2.21.0/bin/allure /usr/local/bin/allure
-
-- name: Generate Allure HTML
-  if: always()
-  run: |
-    allure generate reports/allure-results -o reports/allure-report --clean
-
-- name: Upload Allure HTML
-  if: always()
-  uses: actions/upload-artifact@v4
-  with:
-    name: allure-html
-    path: reports/allure-report
-
-    
-    
 🛠 Troubleshooting
 
-❌ Error: fixture 'base_url' not found
-
+❌ fixture ‘base_url’ not found
 ➡ Add this in conftest.py:
 @pytest.fixture(scope="session")
 def base_url():
     return "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
-
-
-❌ Error: SessionNotCreatedException: user data dir already in use
-
-➡ In CI, always use headless Chrome with unique profile:
+❌ SessionNotCreatedException: user data dir already in use
+➡ Use these Chrome options in CI:
 options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
 
 ❌ Reports not opening in CI
-➡ Download from Actions → Artifacts and open locally.
+➡ Download artifacts → open locally
 
-
-(Quick Highlights)
-	•	Framework Type: Hybrid (POM + Data-driven + Pytest)
-	•	Data Handling: Excel (openpyxl) + parametrize
-	•	Reporting: Allure (detailed), pytest-html (quick view)
-	•	CI: GitHub Actions (pytest → artifacts → download)
-	•	Design Pattern: Page Object Model for maintainability
-	•	Parallel Runs: pytest-xdist with isolated drivers
-	•	Evidence: Screenshots captured via pytest hook, attached to reports
-
-## 🛑 Git Ignore Rules
-
-To keep the repository clean, make sure you **do not commit build artifacts or test reports**.  
-These should only be generated locally or in CI/CD runs.
-
-Add the following rules to your `.gitignore`:
-
-```gitignore
+🛑 Git Ignore Rules
 # Python cache
 __pycache__/
 *.pyc
@@ -189,32 +134,7 @@ reports/
 .vscode/
 .idea/
 
-
-## 📥 Download Test Reports from GitHub Actions
-
-When tests are run in CI (GitHub Actions), reports are uploaded as **artifacts** instead of being committed to the repo.
-
-### Steps to Download Reports
-1. Go to your repository on GitHub.
-2. Navigate to **Actions** tab.
-3. Click on the workflow run you want to inspect (e.g., `CI - pytest (Allure + HTML)`).
-4. Scroll down to the **Artifacts** section.
-5. You will find:
-   - **pytest-html-report** → Download and open `report.html` in your browser.
-   - **allure-results** → Raw Allure results. You can generate a detailed report locally:
-     ```bash
-     allure serve path/to/allure-results
-     ```
-
-### Example
-- `pytest-html-report` → contains a **ready-to-view HTML report** (just open in browser).  
-- `allure-results` → contains `.json` and `.png` data for screenshots and logs, which can be transformed into a rich Allure dashboard.
-
-⚡ Tip: For interviews, you can say:  
-*"We don’t commit reports into the repo. Instead, reports are generated during CI/CD and uploaded as artifacts. This ensures a clean repo and reproducible builds."*
-
 ✅ Quick Commands
-
 # Run tests + reports
 pytest --alluredir=reports/allure-results --html=reports/report.html --self-contained-html -q
 
@@ -222,11 +142,55 @@ pytest --alluredir=reports/allure-results --html=reports/report.html --self-cont
 allure generate reports/allure-results -o reports/allure-report --clean
 allure open reports/allure-report
 
-# Trigger CI manually (no code change)
+# Trigger CI manually
 git commit --allow-empty -m "ci: trigger workflow"
 git push origin main
 
 
-👨‍💻 Author: Anshuman Kumar Ray
+
+👨‍💻 Author
+
+Anshuman
 📌 Role: SDET | Automation Engineer
 📍 Tech: Python · Selenium · Pytest · POM · Allure · GitHub Actions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
