@@ -22,10 +22,9 @@ CI/CD: **GitHub Actions**
 - **Cross-platform**: Works on Mac (M1), Linux, CI runners
 
 ---
-
-## 🗂 Folder Structure
-
-orangehrm-automation/
+## 📂 Folder Structure
+    
+    orangehrm-automation/
 ├─ .github/workflows/ci.yml        # GitHub Actions workflow
 ├─ requirements.txt                # Dependencies
 ├─ pytest.ini
@@ -39,11 +38,12 @@ orangehrm-automation/
 │  └─ login_data.xlsx              # Excel test data
 ├─ utilities/
 │  ├─ excel_reader.py              # Excel utility
-│  └─ driver_factory.py            # (optional) driver mgmt
+│  └─ driver_factory.py            # Driver management
 ├─ reports/
 │  ├─ allure-results/              # Raw Allure results
 │  └─ report.html                  # pytest-html report
 └─ README.md
+
 
 ## ⚙️ Setup (Local)
 
