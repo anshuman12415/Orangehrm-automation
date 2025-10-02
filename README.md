@@ -227,6 +227,6 @@ git commit --allow-empty -m "ci: trigger workflow"
 git push origin main
 
 
-																	👨‍💻 Author: Anshuman Kumar Ray
-																	📌 Role: SDET | Automation Engineer
-																	📍 Tech: Python · Selenium · Pytest · POM · Allure · GitHub Actions
+👨‍💻 Author: Anshuman Kumar Ray
+📌 Role: SDET | Automation Engineer
+📍 Tech: Python · Selenium · Pytest · POM · Allure · GitHub Actions
