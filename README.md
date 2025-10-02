@@ -23,27 +23,35 @@ CI/CD: **GitHub Actions**
 
 ---
 ## 📂 Folder Structure
-    
-    orangehrm-automation/
-├─ .github/workflows/ci.yml        # GitHub Actions workflow
-├─ requirements.txt                # Dependencies
-├─ pytest.ini
-├─ conftest.py                     # Fixtures + reporting hooks
-├─ pages/
-│  ├─ base_page.py                 # BasePage abstraction
-│  └─ login_page.py                # Page Object
-├─ tests/
-│  └─ test_login.py                # Login test (valid/invalid)
-├─ testdata/
-│  └─ login_data.xlsx              # Excel test data
-├─ utilities/
-│  ├─ excel_reader.py              # Excel utility
-│  └─ driver_factory.py            # Driver management
-├─ reports/
-│  ├─ allure-results/              # Raw Allure results
-│  └─ report.html                  # pytest-html report
-└─ README.md
-
+orangehrm-automation/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 # GitHub Actions workflow
+│
+├── requirements.txt               # Project dependencies
+├── pytest.ini                     # Pytest configuration
+├── conftest.py                    # Fixtures + reporting hooks
+│
+├── pages/
+│   ├── base_page.py               # BasePage abstraction
+│   └── login_page.py              # Page Object
+│
+├── tests/
+│   └── test_login.py              # Login test (valid/invalid)
+│
+├── testdata/
+│   └── login_data.xlsx            # Excel test data
+│
+├── utilities/
+│   ├── excel_reader.py            # Excel utility
+│   └── driver_factory.py          # Driver management
+│
+├── reports/
+│   ├── allure-results/            # Raw Allure results
+│   └── report.html                # pytest-html report
+│
+└── README.md
 
 ## ⚙️ Setup (Local)
 
