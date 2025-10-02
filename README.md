@@ -164,6 +164,54 @@ options.add_argument("--disable-gpu")
 	•	Parallel Runs: pytest-xdist with isolated drivers
 	•	Evidence: Screenshots captured via pytest hook, attached to reports
 
+## 🛑 Git Ignore Rules
+
+To keep the repository clean, make sure you **do not commit build artifacts or test reports**.  
+These should only be generated locally or in CI/CD runs.
+
+Add the following rules to your `.gitignore`:
+
+```gitignore
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+env/
+
+# Reports and test outputs
+reports/
+*.html
+*.xml
+
+# IDE / Editor files
+.vscode/
+.idea/
+
+
+## 📥 Download Test Reports from GitHub Actions
+
+When tests are run in CI (GitHub Actions), reports are uploaded as **artifacts** instead of being committed to the repo.
+
+### Steps to Download Reports
+1. Go to your repository on GitHub.
+2. Navigate to **Actions** tab.
+3. Click on the workflow run you want to inspect (e.g., `CI - pytest (Allure + HTML)`).
+4. Scroll down to the **Artifacts** section.
+5. You will find:
+   - **pytest-html-report** → Download and open `report.html` in your browser.
+   - **allure-results** → Raw Allure results. You can generate a detailed report locally:
+     ```bash
+     allure serve path/to/allure-results
+     ```
+
+### Example
+- `pytest-html-report` → contains a **ready-to-view HTML report** (just open in browser).  
+- `allure-results` → contains `.json` and `.png` data for screenshots and logs, which can be transformed into a rich Allure dashboard.
+
+⚡ Tip: For interviews, you can say:  
+*"We don’t commit reports into the repo. Instead, reports are generated during CI/CD and uploaded as artifacts. This ensures a clean repo and reproducible builds."*
 
 ✅ Quick Commands
 
@@ -179,6 +227,6 @@ git commit --allow-empty -m "ci: trigger workflow"
 git push origin main
 
 
-👨‍💻 Author: Anshuman Kumar Ray
-📌 Role: SDET | Automation Engineer
-📍 Tech: Python · Selenium · Pytest · POM · Allure · GitHub Actions
+																	👨‍💻 Author: Anshuman Kumar Ray
+																	📌 Role: SDET | Automation Engineer
+																	📍 Tech: Python · Selenium · Pytest · POM · Allure · GitHub Actions
