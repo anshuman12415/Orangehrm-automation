@@ -50,3 +50,7 @@ jobs:
         with:
           name: allure-results
           path: reports/allure-results
+      - name: Install Chromium (if needed)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
