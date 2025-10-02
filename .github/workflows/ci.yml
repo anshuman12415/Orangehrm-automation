@@ -27,6 +27,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Install Chrome / Chromium (ensure browser + driver available)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -37,20 +42,27 @@ jobs:
           PYTHONPATH: .
         run: |
           mkdir -p reports/allure-results
+          mkdir -p reports/screenshots
           pytest --alluredir=reports/allure-results --html=reports/report.html --self-contained-html -q
 
+      # Upload artifacts even if tests fail
       - name: Upload pytest-html report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-html-report
           path: reports/report.html
 
       - name: Upload Allure results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: reports/allure-results
-      - name: Install Chromium (if needed)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: reports/screenshots
