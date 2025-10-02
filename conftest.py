@@ -1,42 +1,56 @@
-import os
+# conftest.py
+import tempfile
+import shutil
 import pytest
-import allure
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
-
-
-@pytest.fixture(scope="session")
-def base_url():
-    return "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 @pytest.fixture(scope="function")
 def driver():
+    """
+    Creates a Chrome WebDriver with a unique temporary user-data-dir
+    so CI (and parallel tests) won't clash.
+
+    Cleans up the temp dir at the end.
+    """
+    tmp_profile = tempfile.mkdtemp(prefix="chrome-profile-")
     options = Options()
-    # options.add_argument("--headless=new")   # uncomment if you want headless
+
+    # CI-friendly options:
+    options.add_argument("--headless=new")                # run headless in CI
+    # required for many linux CI runners
+    options.add_argument("--no-sandbox")
+    # avoid /dev/shm issues
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")                 # generally safe
+    options.add_argument("--disable-extensions")
+    # sometimes required for newest chrome
+    options.add_argument("--remote-allow-origins=*")
     options.add_argument("--window-size=1920,1080")
+
+    # VERY IMPORTANT: give Chrome a unique user-data-dir to avoid "already in use"
+    options.add_argument(f"--user-data-dir={tmp_profile}")
+    # Optional: choose a unique profile directory inside that user-data-dir
+    # options.add_argument(f"--profile-directory=Profile_{os.getpid()}")
+
     svc = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=svc, options=options)
-    driver.implicitly_wait(10)
-    yield driver
-    driver.quit()
 
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    # hook to take screenshot on failure and attach to allure
-    outcome = yield
-    rep = outcome.get_result()
-    if rep.when == "call" and rep.failed:
-        driver = item.funcargs.get("driver")
+    driver = None
+    try:
+        driver = webdriver.Chrome(service=svc, options=options)
+        yield driver
+    finally:
+        # quit driver first
         if driver:
-            screenshots_dir = os.path.join("reports", "screenshots")
-            os.makedirs(screenshots_dir, exist_ok=True)
-            file_name = f"{item.name}.png"
-            path = os.path.join(screenshots_dir, file_name)
-            driver.save_screenshot(path)
-            with open(path, "rb") as f:
-                allure.attach(f.read(), name=file_name,
-                              attachment_type=allure.attachment_type.PNG)
+            try:
+                driver.quit()
+            except Exception:
+                pass
+        # then remove temporary profile directory
+        try:
+            shutil.rmtree(tmp_profile, ignore_errors=True)
+        except Exception:
+            pass
